@@ -5,6 +5,7 @@ var bodyParser = require('body-parser')
 var logger = require('morgan');
 var exphbs  = require('express-handlebars');
 const mongoose = require('mongoose');
+const methodOverride = require('method-override');
 
 mongoose.connect('mongodb://localhost/CMS',{ useNewUrlParser: true })
         .then((db)=>{
@@ -20,6 +21,8 @@ var app = express();
 // Body Parser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+//Method-Override
+app.use(methodOverride('_method'));
 
 //Template engine
 const {select} = require('./helpers/handlebars-helpers');
