@@ -22,7 +22,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //Template engine
-app.engine('handlebars', exphbs({defaultLayout: 'home'}));
+const {select} = require('./helpers/handlebars-helpers');
+app.engine('handlebars', exphbs({defaultLayout: 'home', helpers:{select:select}}));
 app.set('view engine', 'handlebars');
 
 app.use(logger('dev'));

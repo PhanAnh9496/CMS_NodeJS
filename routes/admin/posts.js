@@ -8,7 +8,9 @@ router.all('/*', (req, res, next) => {
 });
 
 router.get('/', function (req, res, next) {
-	res.render("admin/posts/index");
+	Post.find({}).then(posts => {
+		res.render("admin/posts",{posts:posts});
+	});
 });
 router.get('/create', function (req, res, next) {
 	res.render("admin/posts/create");
@@ -40,6 +42,13 @@ router.post('/create', function (req, res, next) {
 				console.log("Could not saved");
 			});
 	// console.log(req.body.allowComments);
+});
+
+router.get('/edit/:id', function (req, res, next) {
+	Post.findOne({_id:req.params.id}).then(post => {
+		res.render("admin/posts/edit",{post:post});
+	});
+	// res.render("admin/posts/edit");
 });
 
 module.exports = router;
