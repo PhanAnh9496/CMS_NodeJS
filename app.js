@@ -41,7 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Express-session
 app.use(session({
-    secret: 'Phan Anh',
+    secret: 'phananh',
     resave: false,
     saveUninitialized: true,
   }));
@@ -51,6 +51,11 @@ app.use(upload());
 
 //Flash-connect
 app.use(flash());
+app.use((req,res,next) =>{
+    res.locals.success_message = req.flash('success_message');
+    next();
+});
+
 
 app.use('/', homeRouter);
 app.use('/admin', adminRouter);

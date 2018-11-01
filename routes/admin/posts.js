@@ -54,7 +54,6 @@ router.post('/create', function (req, res, next) {
 		let filename = '.jpg';
 
 		if (!isEmpty(req.files)) {
-			console.log('is not empty');
 			let file = req.files.file;
 			filename = Date.now() + filename;
 			file.mv('./public/uploads/' + filename, (err) => {
@@ -78,11 +77,11 @@ router.post('/create', function (req, res, next) {
 		});
 		newPost.save()
 			.then(savedPost => {
-				console.log(savedPost);
+				req.flash('success_message', `Bài viế́t ${savedPost.title} đã được tạo.`);
 				res.redirect('/admin/posts');
 			})
 			.catch(error => {
-				console.log(error,"Could not saved");
+				console.log(error, "Could not saved");
 			});
 	}
 
@@ -117,8 +116,19 @@ router.put('/edit/:id', (req, res) => {
 			post.status = req.body.status;
 			post.allowComments = allowComments;
 			post.body = req.body.body;
+			let filename = '.jpg';
+			if (!isEmpty(req.files)) {
+				console.log('is not empty');
+				let file = req.files.file;
+				filename = Date.now() + filename;
+				post.file = filename;
+				file.mv('./public/uploads/' + filename, (err) => {
+					if (err) throw err;
+				});
+			}
 
 			post.save().then(updatedPost => {
+				req.flash('success_message', 'Bài viết đã được sửa');
 				res.redirect('/admin/posts');
 			});
 		});
@@ -130,6 +140,7 @@ router.delete('/:id', (req, res) => {
 			_id: req.params.id
 		})
 		.then(post => {
+			req.flash('success_message', 'Bài viết đã xóa');
 			fs.unlink(uploadDir + post.file, (err) => {
 				post.remove();
 				res.redirect('/admin/posts');
