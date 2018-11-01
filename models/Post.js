@@ -19,6 +19,9 @@ const PostSchema = new Schema({
     body:{
         type: String,
         require: true
+    },
+    file:{
+        type: String
     }
 });
 

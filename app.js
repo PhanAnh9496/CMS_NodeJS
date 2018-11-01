@@ -6,6 +6,9 @@ var logger = require('morgan');
 var exphbs  = require('express-handlebars');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
+const upload = require('express-fileupload');
+const session = require('express-session');
+const flash = require('connect-flash');
 
 mongoose.connect('mongodb://localhost/CMS',{ useNewUrlParser: true })
         .then((db)=>{
@@ -21,6 +24,7 @@ var app = express();
 // Body Parser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
 //Method-Override
 app.use(methodOverride('_method'));
 
@@ -34,6 +38,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//Express-session
+app.use(session({
+    secret: 'Phan Anh',
+    resave: false,
+    saveUninitialized: true,
+  }));
+
+//Upload Middleware
+app.use(upload());
+
+//Flash-connect
+app.use(flash());
 
 app.use('/', homeRouter);
 app.use('/admin', adminRouter);

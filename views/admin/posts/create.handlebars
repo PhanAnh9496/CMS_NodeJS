@@ -1,9 +1,17 @@
 <h1>Create Post</h1>
-
-<form action="/admin/posts/create" method="POST">
+{{#each errors}}
+    <div class="alert alert-danger">
+        {{message}}
+    </div>
+{{/each}}
+<form action="/admin/posts/create" method="POST" enctype="multipart/form-data">
     <div class="form-group">
         <label for="title">Title</label>
-        <input name="title" type="text" class="form-control" id="title" placeholder="Nhap tieu de">
+        <input name="title" type="text" class="form-control" id="title" placeholder="Nhap tieu de" required>
+    </div>
+    <div class="form-group">
+        <label for="file">File Upload</label>
+        <input name="file" type="file" class="form-control">
     </div>
     <div class="form-group">
         <label for="status">Status</label>
@@ -21,7 +29,7 @@
     </div>
     <div class="form-group">
         <label for="body">Body</label>
-        <textarea name="body" class="form-control" id="body" cols="30" rows="10" placeholder="Nhap noi dung"></textarea>
+        <textarea name="body" class="form-control" id="body" cols="30" rows="10" placeholder="Nhap noi dung" required></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>

@@ -1,6 +1,12 @@
 var express = require('express');
 var router = express.Router();
 const Post = require('../../models/Post');
+const {
+	isEmpty,
+	uploadDir
+} = require('../../helpers/upload-helpers');
+
+const fs = require('fs');
 
 router.all('/*', (req, res, next) => {
 	req.app.locals.layout = 'admin';
@@ -22,28 +28,66 @@ router.get('/create', function (req, res, next) {
 });
 router.post('/create', function (req, res, next) {
 
-	let allowComments = true;
-	if (req.body.allowComments) {
-		allowComments = true;
-	} else {
-		allowComments = false;
+	let errors = [];
+
+	if (!req.body.title) {
+		errors.push({
+			message: 'Nhap tieu de!!!'
+		});
 	}
 
-	const newPost = new Post({
-		title: req.body.title,
-		status: req.body.status,
-		allowComments: allowComments,
-		body: req.body.body
-	});
-	newPost.save()
-		.then(savedPost => {
-			console.log(savedPost);
-			res.redirect('/admin/posts');
-		})
-		.catch(error => {
-			console.log("Could not saved");
+	if (!req.body.status) {
+		errors.push({
+			message: 'Chon trang thai!!!'
 		});
-	// console.log(req.body.allowComments);
+	}
+	if (!req.body.body) {
+		errors.push({
+			message: 'Nhap noi dung!!!'
+		});
+	}
+	if (errors.length > 0) {
+		res.render('admin/posts/create', {
+			errors: errors
+		});
+	} else {
+		let filename = '.jpg';
+
+		if (!isEmpty(req.files)) {
+			console.log('is not empty');
+			let file = req.files.file;
+			filename = Date.now() + filename;
+			file.mv('./public/uploads/' + filename, (err) => {
+				if (err) throw err;
+			});
+		}
+
+		let allowComments = true;
+		if (req.body.allowComments) {
+			allowComments = true;
+		} else {
+			allowComments = false;
+		}
+
+		const newPost = new Post({
+			title: req.body.title,
+			status: req.body.status,
+			allowComments: allowComments,
+			body: req.body.body,
+			file: filename
+		});
+		newPost.save()
+			.then(savedPost => {
+				console.log(savedPost);
+				res.redirect('/admin/posts');
+			})
+			.catch(error => {
+				console.log(error,"Could not saved");
+			});
+	}
+
+
+
 });
 
 // Method PUT
@@ -74,17 +118,23 @@ router.put('/edit/:id', (req, res) => {
 			post.allowComments = allowComments;
 			post.body = req.body.body;
 
-			post.save().then(updatedPost=>{
-				 res.redirect('/admin/posts');
+			post.save().then(updatedPost => {
+				res.redirect('/admin/posts');
 			});
 		});
 });
 
 //Method DELETE
 router.delete('/:id', (req, res) => {
-	Post.remove({_id: req.params.id})
-		.then(result => {
-			res.redirect('/admin/posts');
+	Post.findOne({
+			_id: req.params.id
+		})
+		.then(post => {
+			fs.unlink(uploadDir + post.file, (err) => {
+				post.remove();
+				res.redirect('/admin/posts');
+			});
+
 		});
 });
 

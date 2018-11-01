@@ -5,6 +5,7 @@
         <tr>
             <th>Id</th>
             <th>Title</th>
+            <th>File</th>
             <th>Status</th>
             <th>Allow Comments</th>
         </tr>
@@ -14,6 +15,7 @@
         <tr>
             <td scope="row">{{id}}</td>
             <td>{{title}}</td>
+            <td><img src="/uploads/{{file}}" alt="" height="50"></td>
             <td>{{status}}</td>
             <td>{{allowComments}}</td>
             <td><a href="/admin/posts/edit/{{id}}" class="btn btn-info">Edit</a></td>
