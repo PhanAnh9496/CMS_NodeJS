@@ -19,6 +19,7 @@ mongoose.connect('mongodb://localhost/CMS',{ useNewUrlParser: true })
 var homeRouter = require('./routes/home/index');
 var adminRouter = require('./routes/admin/index');
 var postsRouter = require('./routes/admin/posts');
+var categoriesRouter = require('./routes/admin/categories');
 var app = express();
 
 // Body Parser
@@ -61,5 +62,6 @@ app.use((req,res,next) =>{
 app.use('/', homeRouter);
 app.use('/admin', adminRouter);
 app.use('/admin/posts', postsRouter);
+app.use('/admin/categories', categoriesRouter);
 
 module.exports = app;
