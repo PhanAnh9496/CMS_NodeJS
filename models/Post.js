@@ -22,6 +22,10 @@ const PostSchema = new Schema({
     },
     file:{
         type: String
+    },
+    date: {
+        type: Date,
+        default: Date.now()
     }
 });
 

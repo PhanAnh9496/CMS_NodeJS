@@ -8,6 +8,7 @@
             <th>File</th>
             <th>Status</th>
             <th>Allow Comments</th>
+            <th>Date</th>
         </tr>
     </thead>
     <tbody>
@@ -18,6 +19,7 @@
             <td><img src="/uploads/{{file}}" alt="" height="50"></td>
             <td>{{status}}</td>
             <td>{{allowComments}}</td>
+            <td>{{date}}</td>
             <td><a href="/admin/posts/edit/{{id}}" class="btn btn-info">Edit</a></td>
             <td>
                 <form action="/admin/posts/{{id}}?_method=DELETE" method="POST">
