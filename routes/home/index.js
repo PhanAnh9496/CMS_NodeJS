@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const Post = require('../../models/Post');
 
 router.all('/*', (req, res, next) => {
 	req.app.locals.layout = 'home';
@@ -7,7 +8,13 @@ router.all('/*', (req, res, next) => {
 });
 /* GET home page. */
 router.get('/', function (req, res, next) {
-	res.render('home/index');
+	Post.find({})
+		.then((posts) => {
+			res.render('home/index', {
+				posts: posts
+			});
+		});
+
 });
 router.get('/about', function (req, res, next) {
 	res.render('home/about');
@@ -20,5 +27,18 @@ router.get('/login', function (req, res, next) {
 router.get('/register', function (req, res, next) {
 	res.render('home/register');
 });
+
+router.get('/post/:id', function (req, res, next) {
+	Post.findOne({
+			_id: req.params.id
+		})
+		.then(post => {
+			res.render('home/post', {
+				post: post
+			});
+		});
+
+});
+
 
 module.exports = router;

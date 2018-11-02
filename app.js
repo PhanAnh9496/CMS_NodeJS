@@ -28,9 +28,10 @@ app.use(bodyParser.json());
 //Method-Override
 app.use(methodOverride('_method'));
 
+const {select,generateDate} = require('./helpers/handlebars-helpers');
 //Template engine
-const {select} = require('./helpers/handlebars-helpers');
-app.engine('handlebars', exphbs({defaultLayout: 'home', helpers:{select:select}}));
+
+app.engine('handlebars', exphbs({defaultLayout: 'home', helpers:{select:select, generateDate:generateDate}}));
 app.set('view engine', 'handlebars');
 
 app.use(logger('dev'));
