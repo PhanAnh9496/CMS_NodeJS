@@ -4,6 +4,11 @@ const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
 
+    category:{
+        type: Schema.Types.ObjectId,
+        ref: 'categories'
+    },
+
     title:{
         type: String,
         required: true
