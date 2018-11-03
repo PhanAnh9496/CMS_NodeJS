@@ -9,8 +9,9 @@ const methodOverride = require('method-override');
 const upload = require('express-fileupload');
 const session = require('express-session');
 const flash = require('connect-flash');
+const {mongoDbUrl} = require('./config/database');
 
-mongoose.connect('mongodb://localhost/CMS',{ useNewUrlParser: true })
+mongoose.connect(mongoDbUrl,{ useNewUrlParser: true })
         .then((db)=>{
             console.log("MongoDB Connected");
         })
@@ -55,6 +56,7 @@ app.use(upload());
 app.use(flash());
 app.use((req,res,next) =>{
     res.locals.success_message = req.flash('success_message');
+    res.locals.error_message = req.flash('error_message');
     next();
 });
 
