@@ -1,0 +1,22 @@
+<h1>Comments</h1>
+
+<table class="table table-bordered">
+	<thead class="thead-light">
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Người bình luận</th>
+			<th scope="col">Nội dung</th>
+			<th scope="col">Ngày viết</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{#each comments}}
+		<tr>
+			<th scope="row">{{id}}</th>
+			<td>{{user.firstName}} {{user.lastName}}</td>
+			<td>{{body}}</td>
+			<td>{{generateDate date 'MMMM Do YYYY'}}</td>
+		</tr>
+		{{/each}}
+	</tbody>
+</table>
