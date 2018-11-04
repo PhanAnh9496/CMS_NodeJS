@@ -1,10 +1,12 @@
 var express = require('express');
 var router = express.Router();
 const Category = require('../../models/Category');
+const {userAuthenticated} = require('../../helpers/authentication');
 
-router.all('/*', (req, res, next) => {
-    req.app.locals.layout = 'admin';
-    next();
+//add userAuthenticated
+router.all('/*',(req, res, next) => {
+	req.app.locals.layout = 'admin';
+	next();
 });
 
 //Method GET

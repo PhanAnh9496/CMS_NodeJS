@@ -34,34 +34,59 @@ router.get('/login', function (req, res, next) {
 	res.render('home/login');
 });
 
-passport.use(new LocalStrategy({usernameField: 'email'}, (email,password,done)=>{
-	console.log(email);
-	User.findOne({email: email})
-		.then(user => {
-			if (!user) {
-				return done(null, false, { message: 'Tai khoan khong ton tai' });
-			}
-			bcrypt.compare(password,user.password, (err,matched) => {
-				if (err) {
-					return err;
+passport.use(new LocalStrategy({
+		usernameField: 'email'
+	},
+	(email, password, done) => {
+		User.findOne({
+				email: email
+			})
+			.then(user => {
+				if (!user) {
+					return done(null, false, {
+						message: 'Tai khoan khong ton tai'
+					});
 				}
-				if (matched) {
-					return done(null, user);
-				}
-				else {
-					return done(null, false, { message: 'Sai password.' });
-				}
+				bcrypt.compare(password, user.password, (err, matched) => {
+					if (err) {
+						return err;
+					}
+					if (matched) {
+						return done(null, user);
+					} else {
+						return done(null, false, {
+							message: 'Sai password.'
+						});
+					}
+				});
 			});
-		});
-}));
+	}));
+
+passport.serializeUser(function (user, done) {
+	done(null, user.id);
+});
+
+passport.deserializeUser(function (id, done) {
+	User.findById(id, function (err, user) {
+		done(err, user);
+	});
+});
+
 
 router.post('/login', function (req, res, next) {
 	passport.authenticate('local', {
 		successRedirect: '/admin',
 		failureRedirect: '/login',
 		failureFlash: true
-	})(req,res,next);
+	})(req, res, next);
 });
+
+//Log-out
+router.get('/logout', function (req, res) {
+	req.logout();
+	res.redirect('/login');
+});
+
 
 //Register
 router.get('/register', function (req, res, next) {
@@ -133,8 +158,7 @@ router.post('/register', function (req, res, next) {
 								});
 						});
 					});
-				}
-				else{
+				} else {
 					req.flash('error_message', 'Email đã tồn tại vui lòng đăng nhập!');
 					res.redirect('/login');
 				}
@@ -142,7 +166,7 @@ router.post('/register', function (req, res, next) {
 	}
 });
 
-
+//Detail Post
 router.get('/post/:id', function (req, res, next) {
 	Post.findOne({
 			_id: req.params.id

@@ -10,6 +10,7 @@ const upload = require('express-fileupload');
 const session = require('express-session');
 const flash = require('connect-flash');
 const {mongoDbUrl} = require('./config/database');
+const passport = require('passport');
 
 mongoose.connect(mongoDbUrl,{ useNewUrlParser: true })
         .then((db)=>{
@@ -21,6 +22,7 @@ var homeRouter = require('./routes/home/index');
 var adminRouter = require('./routes/admin/index');
 var postsRouter = require('./routes/admin/posts');
 var categoriesRouter = require('./routes/admin/categories');
+var commentsRouter = require('./routes/admin/comments');
 var app = express();
 
 // Body Parser
@@ -55,15 +57,20 @@ app.use(upload());
 //Flash-connect
 app.use(flash());
 app.use((req,res,next) =>{
+    res.locals.user = req.user || null;
     res.locals.success_message = req.flash('success_message');
     res.locals.error_message = req.flash('error_message');
+    res.locals.error = req.flash('error');
     next();
 });
-
+//PASSPORT-JS
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', homeRouter);
 app.use('/admin', adminRouter);
 app.use('/admin/posts', postsRouter);
 app.use('/admin/categories', categoriesRouter);
+app.use('/admin/comments', commentsRouter);
 
 module.exports = app;
