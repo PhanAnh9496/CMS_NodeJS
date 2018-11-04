@@ -6,11 +6,13 @@ const {
 	isEmpty,
 	uploadDir
 } = require('../../helpers/upload-helpers');
-const {userAuthenticated} = require('../../helpers/authentication');
+const {
+	userAuthenticated
+} = require('../../helpers/authentication');
 const fs = require('fs');
 
 //add userAuthenticated
-router.all('/*' ,(req, res, next) => {
+router.all('/*', (req, res, next) => {
 	req.app.locals.layout = 'admin';
 	next();
 });
@@ -137,7 +139,6 @@ router.put('/edit/:id', (req, res) => {
 			post.category = req.body.category;
 			let filename = '.jpg';
 			if (!isEmpty(req.files)) {
-				console.log('is not empty');
 				let file = req.files.file;
 				filename = Date.now() + filename;
 				post.file = filename;
@@ -158,11 +159,19 @@ router.delete('/:id', (req, res) => {
 	Post.findOne({
 			_id: req.params.id
 		})
+		.populate('comments')
 		.then(post => {
-			req.flash('success_message', 'Bài viết đã xóa');
 			fs.unlink(uploadDir + post.file, (err) => {
-				post.remove();
-				res.redirect('/admin/posts');
+				if (!post.comments.length < 1) {
+					post.comments.forEach(comment => {
+						comment.remove();
+					});
+				}
+				post.remove()
+					.then(postRemoved => {
+						req.flash('success_message', 'Bài viết đã xóa');
+						res.redirect('/admin/posts');
+					});
 			});
 
 		});

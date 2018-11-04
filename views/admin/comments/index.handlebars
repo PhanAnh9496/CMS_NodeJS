@@ -16,6 +16,11 @@
 			<td>{{user.firstName}} {{user.lastName}}</td>
 			<td>{{body}}</td>
 			<td>{{generateDate date 'MMMM Do YYYY'}}</td>
+			<td>
+				<form action="/admin/comments/{{id}}?_method=DELETE" method="POST">
+					<button class="btn btn-danger" type="submit">Delete</button>
+				</form>
+			</td>
 		</tr>
 		{{/each}}
 	</tbody>
