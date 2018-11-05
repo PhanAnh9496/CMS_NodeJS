@@ -56,6 +56,10 @@ app.use(upload());
 
 //Flash-connect
 app.use(flash());
+//PASSPORT-JS
+app.use(passport.initialize());
+app.use(passport.session());
+//Flash request
 app.use((req,res,next) =>{
     res.locals.user = req.user || null;
     res.locals.success_message = req.flash('success_message');
@@ -63,9 +67,7 @@ app.use((req,res,next) =>{
     res.locals.error = req.flash('error');
     next();
 });
-//PASSPORT-JS
-app.use(passport.initialize());
-app.use(passport.session());
+
 
 app.use('/', homeRouter);
 app.use('/admin', adminRouter);

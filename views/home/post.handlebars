@@ -32,8 +32,8 @@
 
 			<hr>
 			{{!-- back 167  --}}
-			{{!-- {{#if user}}
-				{{#if post.allowComments}} --}}
+			{{#if user}}
+				{{#if post.allowComments}}
 					<!-- Comments Form -->
 					<div class="card my-4">
 						<h5 class="card-header">Leave a Comment:</h5>
@@ -47,14 +47,14 @@
 							</form>
 						</div>
 					</div>
-				{{!-- {{else}}
+				{{else}}
 					<h3>Bình luận bị vô hiệu hóa</h3>
 					<hr>
 				{{/if}}
 			{{else}}
 					<h4><a href="/login">Đăng nhập để bình luận bài viết</a></h4>
 					<hr>
-			{{/if}} --}}
+			{{/if}}
 			<!-- Single Comment -->
 			<div class="media mb-4">
 				<img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
