@@ -5,6 +5,7 @@
 		<tr>
 			<th scope="col">Id</th>
 			<th scope="col">Người bình luận</th>
+			<th>Status</th>
 			<th scope="col">Nội dung</th>
 			<th scope="col">Ngày viết</th>
 		</tr>
@@ -14,6 +15,7 @@
 		<tr>
 			<th scope="row">{{id}}</th>
 			<td>{{user.firstName}} {{user.lastName}}</td>
+			<td><input type="checkbox" name="approveComment"></td>
 			<td>{{body}}</td>
 			<td>{{generateDate date 'MMMM Do YYYY'}}</td>
 			<td>

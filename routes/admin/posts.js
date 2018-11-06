@@ -28,6 +28,16 @@ router.get('/', function (req, res, next) {
 		});
 });
 
+router.get('/my-posts', (req,res) => {
+	Post.find({user:req.user.id})
+		.populate('category')
+		.then(posts => {
+			res.render("admin/posts/my-posts", {
+				posts: posts
+			});
+		});
+});
+
 //Method POST
 router.get('/create', function (req, res, next) {
 
@@ -83,6 +93,7 @@ router.post('/create', function (req, res, next) {
 		}
 
 		const newPost = new Post({
+			user:req.user.id,
 			title: req.body.title,
 			status: req.body.status,
 			allowComments: allowComments,
@@ -125,13 +136,13 @@ router.put('/edit/:id', (req, res) => {
 			_id: req.params.id
 		})
 		.then(post => {
-
 			if (req.body.allowComments) {
 				allowComments = true;
 			} else {
 				allowComments = false;
 			}
 
+			post.user = req.user.id;
 			post.title = req.body.title;
 			post.status = req.body.status;
 			post.allowComments = allowComments;
@@ -149,7 +160,7 @@ router.put('/edit/:id', (req, res) => {
 
 			post.save().then(updatedPost => {
 				req.flash('success_message', 'Bài viết đã được sửa');
-				res.redirect('/admin/posts');
+				res.redirect('/admin/posts/my-posts');
 			});
 		});
 });
@@ -170,7 +181,7 @@ router.delete('/:id', (req, res) => {
 				post.remove()
 					.then(postRemoved => {
 						req.flash('success_message', 'Bài viết đã xóa');
-						res.redirect('/admin/posts');
+						res.redirect('/admin/posts/my-posts');
 					});
 			});
 

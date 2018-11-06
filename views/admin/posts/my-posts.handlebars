@@ -1,4 +1,4 @@
-<h1>All Post</h1>
+<h1>My Post</h1>
 
 <table class="table table-bordered">
     <thead>
@@ -9,7 +9,7 @@
             <th>Status</th>
             <th>Category</th>
             <th>Allow Comments</th>
-            <th>Xem Bài</th>
+            <th>Link</th>
             <th>Ngày</th>
         </tr>
     </thead>
@@ -24,6 +24,12 @@
             <td>{{allowComments}}</td>
             <td><a href="/post/{{id}}">Xem</a></td>
             <td>{{generateDate date 'MMMM Do YYYY'}}</td>
+            <td><a href="/admin/posts/edit/{{id}}" class="btn btn-info">Sửa</a></td>
+            <td>
+                <form action="/admin/posts/{{id}}?_method=DELETE" method="POST">
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+            </td>
         </tr>
         {{/each}}
     </tbody>

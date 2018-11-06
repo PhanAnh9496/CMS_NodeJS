@@ -172,6 +172,7 @@ router.get('/post/:id', function (req, res, next) {
 			_id: req.params.id
 		})
 		.populate({path:'comments', populate:{path:'user', model:'users'}})
+		.populate('user')
 		.then(post => {
 			Category.find({}).then(categories => {
 				res.render('home/post', {
