@@ -42,11 +42,65 @@
 <!-- Bootstrap switch -->
 <script src="/javascripts/bootstrap-switch.min.js"></script>
 
+{{!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script> --}}
+
+<script src="/javascripts/Chart.min.js"></script>
+{{!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> --}}
+
+
+<script src="/javascripts/toastr.min.js"></script>
+
+{{!-- Bieu do --}}
+
+<script>
+var ctx = document.getElementById("myChart").getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["Posts", "Comments"],
+        datasets: [{
+            label: '# of Votes',
+            data: [{{postCount}}, {{commentCount}}],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+</script>
+
+
+{{!-- Comment --}}
 <script>
     $("[name = 'approveComment']").bootstrapSwitch();
     $(document).ready(() => {
-        $("[name = 'approveComment']").on('switchChange.bootstrapSwitch', (e, data) => {
-            console.log("Hoan thanh");
+        $("[name = 'approveComment']").on('switchChange.bootstrapSwitch', function(e, data){
+
+            const id = $(this).attr('data-id');
+            $.ajax({
+                type: 'POST',
+                url: '/admin/comments/approve-comment',
+                data: {id: id, approveComment: data},
+                cache: false,
+                success: function(data){
+                    toastr.success(`Bình luận của id: ${data._id} đã được update`);
+                }
+            });
         });
     });
 </script>

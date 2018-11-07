@@ -11,7 +11,7 @@ router.all('/*', (req, res, next) => {
 
 router.get('/', (req, res) => {
     Comment.find({
-            user: req.user.id
+            user: req.user.id // 5bdff3486e5c0d10014df65f
         })
         .populate('user')
         .then(comments => {
@@ -36,6 +36,7 @@ router.post('/', (req, res) => {
                 .then(savedPost => {
                     newComment.save()
                         .then(savedComment => {
+                            req.flash('success_message', 'Bình luận đang được admin phê duyệt');
                             res.redirect(`/post/${post.id}`);
                         });
                 });
@@ -61,6 +62,19 @@ router.delete('/:id', (req, res) => {
             });
 
         });
+});
+
+router.post('/approve-comment', (req, res) => {
+    Comment.findByIdAndUpdate(req.body.id, {
+        $set: {
+            approveComment: req.body.approveComment
+        }
+    }, (err, result) => {
+            if (err) {
+                return err;
+            }
+            res.send(result);
+    });
 });
 
 module.exports = router;
