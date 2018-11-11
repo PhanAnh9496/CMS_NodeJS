@@ -18,7 +18,11 @@ const UserSchema = new Schema({
     password:{
         type: String,
         required: true
-    }
+    },
+    comments:[{
+        type: Schema.Types.ObjectId,
+        ref: 'comments'
+    }]
 });
 
 UserSchema.methods.testMethod = function(){

@@ -13,15 +13,27 @@ router.all('/*', (req, res, next) => {
 });
 /* GET home page. */
 router.get('/', function (req, res, next) {
+
+	const perPage = 8;
+	const page = req.query.page || 1;
+
 	Post.find({})
+		.skip((perPage * page) - perPage)
+		.limit(perPage)
 		.then((posts) => {
-			Category.find({})
-				.then(categories => {
-					res.render('home/index', {
-						posts: posts,
-						categories: categories
-					});
+			Post.count()
+				.then(postCount => {
+					Category.find({})
+						.then(categories => {
+							res.render('home/index', {
+								posts: posts,
+								categories: categories,
+								current: parseInt(page),
+								pages: Math.ceil(postCount/perPage)
+							});
+						});
 				});
+
 		});
 
 });
@@ -167,9 +179,9 @@ router.post('/register', function (req, res, next) {
 });
 
 //Detail Post
-router.get('/post/:id', function (req, res, next) {
+router.get('/post/:slug', function (req, res, next) {
 	Post.findOne({
-			_id: req.params.id
+			slug: req.params.slug
 		})
 		.populate({
 			path: 'comments',

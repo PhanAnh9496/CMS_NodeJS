@@ -12,7 +12,7 @@ const flash = require('connect-flash');
 const {mongoDbUrl} = require('./config/database');
 const passport = require('passport');
 
-mongoose.connect(mongoDbUrl,{ useNewUrlParser: true })
+mongoose.connect(mongoDbUrl,{ useNewUrlParser: true, useCreateIndex: true, })
         .then((db)=>{
             console.log("MongoDB Connected");
         })
@@ -32,10 +32,10 @@ app.use(bodyParser.json());
 //Method-Override
 app.use(methodOverride('_method'));
 
-const {select,generateDate} = require('./helpers/handlebars-helpers');
+const {select,generateDate,paginate} = require('./helpers/handlebars-helpers');
 //Template engine
 
-app.engine('handlebars', exphbs({defaultLayout: 'home', helpers:{select:select, generateDate:generateDate}}));
+app.engine('handlebars', exphbs({defaultLayout: 'home', helpers:{select:select, generateDate:generateDate, paginate:paginate}}));
 app.set('view engine', 'handlebars');
 
 app.use(logger('dev'));

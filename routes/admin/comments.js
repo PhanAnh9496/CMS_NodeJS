@@ -37,7 +37,7 @@ router.post('/', (req, res) => {
                     newComment.save()
                         .then(savedComment => {
                             req.flash('success_message', 'Bình luận đang được admin phê duyệt');
-                            res.redirect(`/post/${post.id}`);
+                            res.redirect(`/post/${post.slug}`);
                         });
                 });
         });
