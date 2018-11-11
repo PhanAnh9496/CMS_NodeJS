@@ -3,6 +3,7 @@ var router = express.Router();
 var faker = require('Faker');
 const Post = require('../../models/Post');
 const Comment = require('../../models/Comment');
+const Category = require('../../models/Category');
 const {
 	userAuthenticated
 } = require('../../helpers/authentication');
@@ -14,15 +15,20 @@ router.all('/*', (req, res, next) => {
 });
 
 router.get('/', function (req, res, next) {
-	Post.count({})
-		.then(postCount => {
-			Comment.count({})
-				.then(commentCount => {
-					res.render('admin/index', {
-						postCount: postCount,
-						commentCount: commentCount
-					});
-				});
+
+	const promises = [
+		Post.count().exec(),
+		Category.count().exec(),
+		Comment.count().exec(),
+	];
+
+	Promise.all(promises)
+		.then(([postCount, categoryCount, commentCount]) => {
+			res.render('admin/index', {
+				postCount: postCount,
+				categoryCount: categoryCount,
+				commentCount: commentCount
+			});
 		});
 });
 

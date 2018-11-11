@@ -57,17 +57,19 @@ var ctx = document.getElementById("myChart").getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ["Posts", "Comments"],
+        labels: ["Posts", "Categories", "Comments"],
         datasets: [{
-            label: '# of Votes',
-            data: [{{postCount}}, {{commentCount}}],
+            label: 'CMS Data',
+            data: [{{postCount}}, {{categoryCount}}, {{commentCount}}],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
+                'rgba(186, 220, 88,1.0)',
+                'rgba(54, 162, 333, 0.2)',
             ],
             borderColor: [
                 'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
+                'rgba(106, 176, 76,1.0)',
+                'rgba(54, 162, 235, 1)'
             ],
             borderWidth: 1
         }]
